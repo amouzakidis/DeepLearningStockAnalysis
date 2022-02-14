@@ -17,10 +17,12 @@ class TrainingSample:
             self.tag = constants.DATASET_INTERESTING
         else:
             self.tag = constants.DATASET_NOT_INTERESTING
+        return self.tag
 
     def tagBasedOnAverage( self ):
-        avgValue =sum( self.evaluationData, key=lambda x:x[ 'Close' ]) / len( self.evaluationData )
+        avgValue =sum( [ item['Close'] for item in self.evaluationData ] ) / len( self.evaluationData )
         if avgValue > self.data[ len( self.data ) -1 ][ "Close" ]  * constants.WANTED_INCREASED_FACTOR:
             self.tag = constants.DATASET_INTERESTING
         else:
             self.tag = constants.DATASET_NOT_INTERESTING
+        return self.tag

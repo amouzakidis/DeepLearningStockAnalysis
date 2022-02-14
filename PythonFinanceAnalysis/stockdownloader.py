@@ -4,7 +4,6 @@ import datetime as dt
 import csv
 import sys
 from dateutil.relativedelta import relativedelta
-import pymongo
 from pymongo import MongoClient
 
 print( sys.argv )
