@@ -17,6 +17,7 @@ db = conn["stocks_database"]
 collection = db["stock_history"]
 collectionMax = db["stock_samples_max"]
 collectionAvg = db["stock_samples_avg"]
+collectionGAI = db["stock_samples_gai"]
 
 tickers = []
 with open('./data/nasdaq_screener_1644443600221.csv') as csvfile:
@@ -26,6 +27,7 @@ with open('./data/nasdaq_screener_1644443600221.csv') as csvfile:
 
 totalMax = 0
 totalAvg = 0
+totalGAI = 0
 idx = 0
 jdx = 0
 totalSamples = 0
@@ -42,9 +44,15 @@ for ticker in tickers:
             sample = trainingutils.TrainingSample(queue)
             maxTag = sample.tagBasedOnMax()
             avgTag = sample.tagBasedOnAverage()
+            generalIncreaseTag = sample.tagBasedOnGeneralIncrease()
             totalMax += maxTag
             totalAvg += avgTag            
-            collectionMax.insert_one( { "ticker": ticker, "data": sample.data, "tag": maxTag })
-            collectionAvg.insert_one( { "ticker": ticker, "data": sample.data, "tag": avgTag })
+            totalGAI += generalIncreaseTag
+            #collectionMax.insert_one( { "ticker": ticker, "data": sample.data, "tag": maxTag })
+            #collectionAvg.insert_one( { "ticker": ticker, "data": sample.data, "tag": avgTag })
+            collectionGAI.insert_one( { "ticker": ticker, "data": sample.data, "tag": generalIncreaseTag })
 
-print( "Total Max:" + str( totalMax ) + "(" + str( totalMax/totalSamples ) + ") Total Average:" + str( totalAvg )  + "(" + str( totalMax/totalSamples ) + ") Total Samples:" + str( totalSamples ) )
+print( "Total Max:" + str( totalMax ) + "(" + str( totalMax/totalSamples ) + ")" )
+print( "Total Average:" + str( totalAvg )  + "(" + str( totalAvg/totalSamples ) + ")")
+print( "Total Overall Average:" + str( totalGAI )  + "(" + str( totalGAI/totalSamples ) + ")")
+print( "Total Samples:" + str( totalSamples ) )

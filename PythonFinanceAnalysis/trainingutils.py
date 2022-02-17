@@ -21,7 +21,16 @@ class TrainingSample:
 
     def tagBasedOnAverage( self ):
         avgValue =sum( [ item['Close'] for item in self.evaluationData ] ) / len( self.evaluationData )
-        if avgValue > self.data[ len( self.data ) -1 ][ "Close" ]  * constants.WANTED_INCREASED_FACTOR:
+        if avgValue > self.data[ len( self.data ) -1 ][ "Close" ]  * constants.WANTED_AVERAGE_INCREASED_FACTOR:
+            self.tag = constants.DATASET_INTERESTING
+        else:
+            self.tag = constants.DATASET_NOT_INTERESTING
+        return self.tag
+
+    def tagBasedOnGeneralIncrease( self ):
+        avgValue = sum( [ item['Close'] for item in self.evaluationData ] ) / len( self.evaluationData )
+        avgPrevValue = sum( [ item['Close'] for item in self.data ] ) / len( self.data )
+        if avgValue > self.data[ len( self.data ) -1 ][ "Close" ] and avgValue > avgPrevValue:
             self.tag = constants.DATASET_INTERESTING
         else:
             self.tag = constants.DATASET_NOT_INTERESTING
